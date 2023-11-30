@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html xmlns:sec="http://www.thymeleaf.org/extras/spring-security" sec:authorize="isAuthenticated()">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <title>Home</title>
+</head>
+<body>
+	<header>
+    	<p class="h1 text-center" th:utext="Page + ' ' + ${#authentication.principal.username}"></p>
+    </header>
+    <main>
+	    <div class="container">
+	    	<nav class="navbar navbar-nav navbar-text navbar-expand-lg">
+	    		<ul class="list-unstyled list-group list-group-horizontal">
+	    			<li class="list-group-item"><a class="navbar-brand nav-link link-primary" href="/">Accueil</a></li>
+	    			<li class="list-group-item"><a class="navbar-brand nav-link link-primary" href="/celebrites">Célébrités</a></li>
+	    			<li class="list-group-item"><a class="navbar-brand nav-link link-primary" href="/monuments">Monuments</a></li>
+	    			<li class="list-group-item"><a class="navbar-brand nav-link link-primary" href="/lieux">Lieux</a></li>
+	    			<li class="list-group-item"><a class="navbar-brand nav-link link-primary" href="/departements">Départements</a></li>
+	    			<li class="list-group-item"><a class="navbar-brand nav-link link-secondary" href="/logout">Se déconnecter</a></li>
+	    		</ul>
+	    	</nav>
+	    </div>
+	    <div class="container">
+		    <p>Ceci est la page d'accueil de mon application web. Le but est de décrire des monuments localisés dans
+		des communes (lieux). Ces lieux sont situés dans des départements français. Des personnages célèbres
+		sont rattachés à des monuments. Par exemple, Jean-Baptiste Poquelin dit Molière est rattaché au
+		square Molière ou à l’hôtel Lacoste, à Pézenas, commune localisée géographiquement dans l’Hérault.
+		De même, la cathédrale Saint Pierre est un monument localisé à Montpellier. Pour la simplicité du
+		schéma, nous avons choisi de considérer qu’un monument n’était situé que dans un et un seul lieu, ce
+		qui dans la réalité, n’est pas toujours le cas (la base de monuments historiques français Mérimée laisse
+		apparaître des monuments qui sont situés sur plusieurs communes à l’exemple d’un aqueduc qui peut
+		traverser plusieurs communes).</p>
+	    </div>
+	</main>
+    <footer>
+    	<p class="text-center">Fait par Adrien MEYRAND, M2 ICO</p>
+    </footer>
+</body>
+</html>

@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html xmlns:sec="http://www.thymeleaf.org/extras/spring-security" sec:authorize="isAuthenticated()">
+  <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">  
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+  <title>Monuments par code insee</title>
+  </head>
+  <body>
+  	<header>
+  		<p class="h1 text-center">Monuments par code insee</p>
+    	<nav class="navbar navbar-nav navbar-text navbar-expand-lg">
+    		<ul class="list-unstyled list-group list-group-horizontal">
+    			<li class="list-group-item"><a class="navbar-brand nav-link link-primary" href="/">Accueil</a></li>
+    			<li class="list-group-item"><a class="navbar-brand nav-link link-primary" href="/celebrites">Célébrités</a></li>
+    			<li class="list-group-item"><a class="navbar-brand nav-link link-primary" href="/monuments">Monuments</a></li>
+    			<li class="list-group-item"><a class="navbar-brand nav-link link-primary" href="/lieux">Lieux</a></li>
+    			<li class="list-group-item"><a class="navbar-brand nav-link link-primary" href="/departements">Départements</a></li>
+	    		<li class="list-group-item"><a class="navbar-brand nav-link link-secondary" href="/logout">Se déconnecter</a></li>
+			</ul>
+    	</nav>
+  		<hr />
+  	</header>
+  	<main>
+	    <p class="h2 text-center">Liste des monuments :</p>
+	    <div class="table-responsive container" style="max-height: 500px">
+	        <table class="table table-hover table-bordered table-striped">
+	        	<tr class="table-primary">
+	        		<th scope="col">Identifiant du monument</th>
+	        		<th scope="col">Nom</th>
+	        		<th scope="col">Propriétaire</th>
+	        		<th scope="col">Type de monument</th>
+	        		<th scope="col">Longitude</th>
+	        		<th scope="col">Latitude</th>
+	        		<th scope="col">Code insee du lieu</th>
+	        		<th scope="col">Célébrités associées</th>
+	        	</tr>
+	        	<th:block th:each="monument : ${listeMonuments}">
+	        		<tr class="table-secondary">
+				        <td th:utext="${monument.geohash}"></td>
+				        <td th:utext="${monument.nom}"></td>
+				        <td th:utext="${monument.proprietaire}"></td>
+				        <td th:utext="${monument.typeM}"></td>
+				        <td th:utext="${monument.longitude}"></td>
+				        <td th:utext="${monument.latitude}"></td>
+				        <td th:utext="${monument.lieu.codeInsee}"></td>
+				        <td>
+				        	<th:block th:if="${#arrays.length(monument.listeCelebrites) == 0}">
+				        		<p class="text-decoration-underline" th:text="Aucune"></p>
+				        	</th:block>
+					        <th:block th:each="celebrite : ${monument.listeCelebrites}">
+		            			<p class="text-decoration-underline"th:utext="${celebrite.prenom + ' ' + celebrite.nom}"></p>
+		        			</th:block>
+	        			</td>
+			        </tr>
+	            </th:block>
+	        </table>
+	        <hr />
+	    </div>
+	    <div class="container">
+	    
+	    </div>
+    </main>
+  </body>
+</html>

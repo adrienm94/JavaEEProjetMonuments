@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html xmlns:sec="http://www.thymeleaf.org/extras/spring-security" sec:authorize="isAuthenticated()">
+  <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">  
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+  <title>Lieux</title>
+  </head>
+  <body>
+  	<header>
+  		<p class="h1 text-center">Lieux</p>
+  		<nav class="navbar navbar-nav navbar-text navbar-expand-lg">
+    		<ul class="list-unstyled list-group list-group-horizontal">
+    			<li class="list-group-item"><a class="navbar-brand nav-link link-primary" href="/">Accueil</a></li>
+    			<li class="list-group-item"><a class="navbar-brand nav-link link-primary" href="/celebrites">Célébrités</a></li>
+    			<li class="list-group-item"><a class="navbar-brand nav-link link-primary" href="/monuments">Monuments</a></li>
+    			<li class="list-group-item"><a class="navbar-brand nav-link link-primary" href="/lieux">Lieux</a></li>
+    			<li class="list-group-item"><a class="navbar-brand nav-link link-primary" href="/departements">Départements</a></li>
+    			<li class="list-group-item"><a class="navbar-brand nav-link link-secondary" href="/logout">Se déconnecter</a></li>
+			</ul>
+		</nav>
+  		<hr />
+  	</header>
+  	<main>
+	    <p class="h2 text-center">Liste des <span th:text="${nombreLieux}"></span> lieux :</p>
+	    <div class="table-responsive container" style="max-height: 500px">
+	        <table class="table table-hover table-bordered table-striped">
+	        	<tr class="table-primary">
+	        		<th scope="col">Code insee du lieu</th>
+	        		<th scope="col">Commune</th>
+	        		<th scope="col">Longitude</th>
+	        		<th scope="col">Latitude</th>
+	        		<th scope="col">Département</th>
+	        		<th scope="col">Monuments à voir</th>
+	        	</tr>
+	        	<th:block th:each="lieu : ${listeLieux}">
+	        		<tr class="table-secondary">
+				        <td th:utext="${lieu.codeInsee}"></td>
+				        <td th:utext="${lieu.nomCom}"></td>
+				        <td th:utext="${lieu.longitude}"></td>
+				        <td th:utext="${lieu.latitude}"></td>
+				        <td th:utext="${lieu.dep.nomDep}"></td>
+				        <td>
+				        	<th:block th:if="${#arrays.length(lieu.monuments) == 0}">
+				        		<p class="text-decoration-underline" th:utext="Aucun"></p>
+				        	</th:block>
+					        <th:block th:each="monument : ${lieu.monuments}">
+		            			<p class="text-decoration-underline" th:utext="${monument.nom}"></p>
+		        			</th:block>
+	        			</td>
+			        </tr>
+	            </th:block>
+	        </table>
+	        <hr />
+	    </div>
+	    <div class="container">
+	    	<form action="lieuById">
+	    		<p class="h2">Rechercher un lieu :</p>
+	    		<br />
+	    		<select name="id" class="form-select">
+	    			<option th:value="${lieu.codeInsee}" th:each="lieu: ${listeLieux}">
+	    				<span th:utext="${lieu.codeInsee} + ' (' + ${lieu.nomCom}+ ')' "></span>
+	    			</option>
+	    		</select>
+	    		<input type="submit" value="Rechercher" class="btn btn-primary">
+	    	</form>
+	    	<br />
+	    	<form action="ajoutLieu" method="post" sec:authorize="hasRole('ADMIN')" th:if="${nombreLieux} != null">
+	    		<p class="h2">Ajouter/modifier un lieu</p>
+	    		<br />
+	    		<label for="id">Code insee : </label>
+	    		<input type="text" name="id" pattern="[0-9]{5}" class="form-control" required><br />
+	    		<label for="commune">Commune : </label>
+	    		<input type="text" name="commune" class="form-control" required><br />
+	    		<label for="longitude">Longitude : </label>
+	    		<input type="text" name="longitude" class="form-control" required><br />
+	    		<label for="latitude">Latitude : </label>
+	    		<input type="text" name="latitude" class="form-control" required><br />
+	    		<label for="depLieu">Numéro du département : </label>
+	    		<input type="text" name="depLieu" class="form-control" required><br />
+	    		<label for="monuments[]">Monuments associés : </label>
+	    		<select name="monuments[]" class="form-select" required>
+	    			<option th:each="monument : ${listeMonuments}">
+	    				<span th:utext="${monument.geohash}"></span>
+	    				<span th:utext="'(' + ${monument.nom} + ')' "></span>
+	    			</option>
+	    		</select>
+	    		<input type="submit" value="Ajouter" class="btn btn-primary">
+	    	</form>
+	    	<br />
+			<form action="suppressionLieu" sec:authorize="hasRole('ADMIN')">
+	    		<p class="h2">Supprimer un lieu :</p>
+	    		<br />
+	    		<select name="id" class="form-select">
+	    			<option th:value="${lieu.codeInsee}" th:each="lieu: ${listeLieux}">
+	    				<span th:utext="${lieu.nomCom}"></span>
+	    			</option>
+	    		</select>
+	    		<input type="submit" value="Supprimer" class="btn btn-primary">
+	    	</form>
+	    </div>
+    </main>
+  </body>
+</html>
